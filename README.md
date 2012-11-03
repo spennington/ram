@@ -26,7 +26,7 @@ master file. This is best demonstrated with an example.
 
 Consider an Android project with a directory structure something like:
 
-   AndroidProject
+    AndroidProject
                  |
                  |---->src/
                  |---->res
@@ -62,7 +62,7 @@ resolution.
 
 So, a ram manged project directory structure might look something lime:
 
-   AndroidProject
+    AndroidProject
                  |---->ramfile.json
                  |---->src/
                  |---->masters/
