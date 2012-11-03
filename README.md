@@ -14,7 +14,7 @@ step is to install ImageMagick (http://www.imagemagick.org/script/index.php)
 
 Download and install the latest release:
 
-    curl https://github.com/spennington/ram/downloads/ram-0.1.0.tar.gz
+    curl -O http://cloud.github.com/downloads/spennington/ram/ram-0.1.0.tar.gz 
     tar -xzvf ram-0.1.0.tar.gz
     cd ram-0.1.0
     sudo python setup.py install
@@ -22,5 +22,5 @@ Download and install the latest release:
 Usage
 -----
 
-See `ram help`
+See `ram -h`
 
