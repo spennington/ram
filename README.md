@@ -52,7 +52,7 @@ Consider an Android project with a directory structure something like:
 As you can there are two image assets but each must be replicated and resized
 for each of the different target densitites.
 
-If these images were to change it would require exporting of eight new images,
+If these images were to change it would require exporting of eight new images
 by a designer and the developer would need to replace eight new images inside
 the project.
 
@@ -60,14 +60,14 @@ ram allows the designer to export a single high resolution asset and allows the
 developer to create generation rules for converting that asset to the necessary
 resolution.
 
-So, a ram manged project directory structure might look something lime:
+So, a ram manged project directory structure might look something like:
 
     AndroidProject
                  |---->ramfile.json
                  |---->src/
                  |---->masters/
-                              |---->ic_launcher.png
-                              |---->image.png
+                              |---->ic_launcher.psd
+                              |---->image.psd
                  |---->res/
                          |----->drawable-ldpi
                          |----->drawable-mdpi
@@ -93,8 +93,9 @@ The developer could now execute:
 Which will inform the developer that the two master files are ready for
 conversion.
 
-Next, the developer must create a ramfile which instructs ram how to
-convert the master images. An example ram file might look something like:
+Next, the developer must create a ramfile (ramfile.json) which instructs ram
+how to convert the master images. An example ram file might look something
+like:
 
     {
         "templates": {
@@ -125,14 +126,14 @@ convert the master images. An example ram file might look something like:
         },
        "conversions": [
           {
-             "master":"masters/ic_launcher.png",
+             "master":"masters/ic_launcher.psd",
              "template": "android",
              "name": "ic_launcher.png",
              "basewidth": 48,
              "baseheight": 48
           },
           {
-             "master":"masters/image.png",
+            "master":"masters/image.psd",
              "template": "android",
              "name": "image.png",
              "basewidth": 200,
@@ -147,13 +148,11 @@ masters/ic_launcher.png and one for masters/image.png. The files are then
 converted using the 3:4:6:8 conversion paradigm used by Android
 (http://developer.android.com/guide/practices/screens_support.html#DesigningResources)
 
-More inforamtion about the ramfile can be found below.
-
 Finally, the developer can execute:
 
     ram convert
 
-And ram will conver the two master files into eight image files inside the
+And ram will convert the two master files into eight image files inside the
 correct folders.
 
 ramfile
