@@ -168,7 +168,7 @@ def populate_template(template, args):
         slaves.append(slave)
     return slaves
 
-def do_conversions(conversion, verbose):
+def do_conversions(conversion, verbose, dry_run):
     if verbose:
         print 'converting %s' % conversion.master
 
@@ -182,12 +182,20 @@ def do_conversions(conversion, verbose):
         if verbose:
             print '\t %s' % slave
 
-        result = subprocess.call(
-            ['convert',
-             '-resize',
-             '%sx%s' % (str(slave.width), str(slave.height)),
-             str(conversion.master) + '[0]',
-             str(slave.path)])
+        if (dry_run):
+            print 'convert -resize %sx%s %s[0] %s' % (
+                    str(slave.width),
+                    str(slave.height),
+                    str(conversion.master),
+                    str(slave.path))
+            result = 0
+        else:
+            result = subprocess.call(
+                ['convert',
+                 '-resize',
+                 '%sx%s' % (str(slave.width), str(slave.height)),
+                 str(conversion.master) + '[0]',
+                 str(slave.path)])
         if result != 0:
             if verbose:
                 print '\t failed'
@@ -227,18 +235,29 @@ def convert(args):
             if f[0] not in conversions:
                 print 'warning: no conversion stragegy found for %s' % f[0]
             else:
-                success = do_conversions(conversions[f[0]], args.verbose)
+                success = do_conversions(conversions[f[0]], args.verbose, args.dry_run)
                 if success:
-                    file_index.update(f[0], f[1])
+                    if not args.dry_run:
+                        file_index.update(f[0], f[1])
                     success_count += 1
 
         print 'successfully converted %d master files' % success_count
 
 def help_cmd(args):
-    if (args.command == 'init'):
-        init_parser.print_help()
+    if (args.command == 'add'):
+        add_parser.print_help()
+    elif (args.command == 'convert'):
+        convert_parser.print_help()
     elif (args.command == 'help'):
         help_parser.print_help()
+    elif (args.command == 'init'):
+        init_parser.print_help()
+    elif (args.command == 'ls'):
+        ls_parser.print_help()
+    elif (args.command == 'rm'):
+        rm_parser.print_help()
+    elif (args.command == 'status'):
+        status_parser.print_help()
     else:
         print 'no such command: ' + args.command
 
@@ -336,6 +355,13 @@ convert_parser.add_argument('-v', '--verbose',
         dest='verbose',
         metavar='verbose',
         help='print extra information',
+        default=False)
+convert_parser.add_argument('-d', '--dry-run',
+        action='store_const',
+        const=True,
+        dest='dry_run',
+        metavar='dry run',
+        help='print out conversions, but do not actually execute them',
         default=False)
 convert_parser.set_defaults(func=convert)
 
